@@ -4,15 +4,33 @@ using UnityEngine;
 
 public class RaycastCheck : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Camera cam;
+    public LayerMask mask;
+
+    private void Awake()
     {
-        true;
+        cam = Camera.main;
     }
+
 
     // Update is called once per frame
     void Update()
     {
-        
+        //Draw Ray
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.z = 1000f;
+        mousePos = cam.ScreenToWorldPoint(mousePos);
+        Debug.DrawRay(transform.position, mousePos - transform.position, Color.blue);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, 1000, mask))
+            {
+                Debug.Log(hit.transform.name);
+            }
+        }
     }
 }
